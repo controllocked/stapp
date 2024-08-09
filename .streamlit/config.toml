@@ -1,0 +1,12 @@
+[server]
+runOnSave = true 
+
+[theme]
+base="dark"
+primaryColor="#28c3a0"  # Основной акцентный цвет, зеленоватый оттенок
+backgroundColor="#1c1c1c"  # Темный фон
+secondaryBackgroundColor="#262626"  # Вторичный фон, немного светлее основного
+textColor="#d3d3d3"  # Светло-серый цвет текста
+font="monospace"  # Современный шрифт
+
+
