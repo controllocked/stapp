@@ -29,7 +29,7 @@ BrainGrokker идеально подходит для студентов, исс
 
 **Присоединяйтесь к нам в путешествии по миру знаний!**
 """
-PAGES = ['Home', 'Notes', 'Visualizer', 'About']
+PAGES = ['Главная', 'Заметки', 'Визуализатор', 'О проекте']
 STYLES = {
     "nav": {
         "background-color": "#1c1c1c",  # Темный фон для навигации
@@ -58,10 +58,10 @@ STYLES = {
     },
 }
 OPTIONS = {
-    "show_menu": False,
+    "show_menu": True,
     "show_sidebar": True,
     "hide_nav": True,
-    "use_padding": True
+    "use_padding": False
 }
 
 
@@ -136,10 +136,10 @@ def authorisation_page():
     navigate()
 
 functions = {
-    "Home": pg.display_activity_metrics,
-    "Notes": pg.create_note_component,
-    "Visualizer": pg.show_visualizer,
-    "About": pg.show_about
+    "Главная": pg.display_activity_metrics,
+    "Заметки": pg.create_note_component,
+    "Визуализатор": pg.show_visualizer,
+    "О проекте": pg.show_about
 }
 
 if 'authenticated' in st.session_state and st.session_state.authenticated:
@@ -152,6 +152,7 @@ if 'authenticated' in st.session_state and st.session_state.authenticated:
     go_to = functions.get(page)
     if go_to:
         go_to()
+        
     
 else:
     authorisation_page()

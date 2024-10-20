@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit_antd_components as sac
 from db import save_user_settings
 from st_link_analysis.component.layouts import LAYOUTS
 

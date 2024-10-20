@@ -1,14 +1,15 @@
 from pymongo import MongoClient
-from pymongo.errors import ConnectionFailure
+from pymongo.errors import ConnectionFailure, OperationFailure
 from bson.objectid import ObjectId
 from datetime import datetime
 from werkzeug.security import check_password_hash
+import certifi
 import streamlit as st
 
 DEFAULT_SETTINGS = {
     "ace_theme": "twilight",
     "ace_font_size": 14,
-    "language": "plain_text",
+    "language": "markdown",
     "show_gutter": True,
     "node_color": "#34ebd8",
     "edge_color": "#eb34eb",
@@ -18,20 +19,35 @@ DEFAULT_SETTINGS = {
 }
 
 
-# Подключение к базе данных
+# Функция для подключения к MongoDB Atlas
 @st.cache_resource
-def get_db(uri, name):
+def get_db(uri, db_name):
     try:
-        client = MongoClient(uri, serverSelectionTimeoutMS=5000)
-        db = client[name]
-        client.admin.command('ping') 
+        client = MongoClient(uri, serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where())
+        db = client[db_name]
+        # Проверяем соединение
+        client.admin.command('ping')
         return db
     except ConnectionFailure:
-        print("Server not available")
+        st.error("Не удалось подключиться к серверу")
         return None
 
-db = get_db(uri = f'mongodb://{st.secrets['mongo']['host']}:{st.secrets['mongo']['port']}', name = st.secrets['mongo']['name'])
-# Функции для работы с пользователями
+# Подключение к базе данных
+db_password = st.secrets["mongo"]["password"]  # Достаем пароль из секретов
+db_name = st.secrets["mongo"]["name"]  # Название базы данных
+db_username = st.secrets["mongo"]["username"]
+
+# Строка подключения к MongoDB Atlas
+uri = f"mongodb+srv://{db_username}:{db_password}@braingrokker.a6uqrlj.mongodb.net/?retryWrites=true&w=majority&appName=BrainGrokker"
+
+# Получаем базу данных
+db = get_db(uri=uri, db_name=db_name)
+
+# Проверяем успешность подключения
+if db is not None:
+    st.success("Успешно подключено к базе данных")
+
+
 
 def register_user(login, password_hash):
     user = {
